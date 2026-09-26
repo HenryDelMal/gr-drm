@@ -1,4 +1,7 @@
 It is considered good practice to add examples in here to demonstrate the
 functionality of your OOT module. Python scripts, GRC flow graphs or other
 code can go here.
+drm_fac_runtime_test.grc is a minimal GNU Radio Companion runtime check. It
+generates three DRM Fast Access Channel (FAC) frames and writes 216 binary
+output bytes to drm_fac_output.bin.
 

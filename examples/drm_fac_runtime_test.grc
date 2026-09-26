@@ -1,0 +1,93 @@
+options:
+  parameters:
+    author: HenrydelMal
+    category: '[DRM Examples]'
+    cmake_opt: ''
+    comment: 'Runtime compatibility check for the gr-drm FAC generator.'
+    copyright: ''
+    description: 'Generates three DRM FAC frames and writes the 216 output bits to drm_fac_output.bin.'
+    gen_cmake: 'Off'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: drm_fac_runtime_test
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: run
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: DRM FAC Runtime Test
+    window_size: ''
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: tp
+  id: variable_drm_config
+  parameters:
+    RM: '1'
+    SO: '3'
+    audio_sample_rate: '24000'
+    long_interl: 'False'
+    msc_mapping: '1'
+    msc_prot_level_2_16: '1'
+    msc_prot_level_2_64: '0'
+    sdc_mapping: '1'
+    station_label: '"gr-drm Test"'
+    text_message: '"GNU Radio 3.10 compatibility test"'
+  states:
+    coordinate: [80, 64]
+    rotation: 0
+    state: enabled
+- name: drm_generate_fac_b_0
+  id: drm_generate_fac_b
+  parameters:
+    tp: tp
+  states:
+    coordinate: [80, 184]
+    rotation: 0
+    state: enabled
+- name: blocks_head_0
+  id: blocks_head
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Stop after three complete FAC frames.'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: tp.fac().L() * 3
+    type: byte
+    vlen: '1'
+  states:
+    coordinate: [336, 184]
+    rotation: 0
+    state: enabled
+- name: blocks_file_sink_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: 'Expected result: 216 bytes containing only binary values 0 and 1.'
+    file: '"drm_fac_output.bin"'
+    type: byte
+    unbuffered: 'True'
+    vlen: '1'
+  states:
+    coordinate: [568, 184]
+    rotation: 0
+    state: enabled
+
+connections:
+- [drm_generate_fac_b_0, '0', blocks_head_0, '0']
+- [blocks_head_0, '0', blocks_file_sink_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0
