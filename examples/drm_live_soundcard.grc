@@ -1,0 +1,312 @@
+options:
+  parameters:
+    author: HenrydelMal
+    category: '[DRM Examples]'
+    cmake_opt: ''
+    comment: 'Route the output to a virtual audio cable or line output. Keep speaker volume low.'
+    copyright: ''
+    description: 'Continuously encodes a 1 kHz audio programme into DRM and emits a real 48 kHz baseband signal through the default sound-card sink.'
+    gen_cmake: 'Off'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: drm_live_soundcard
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: DRM Live Sound-card Baseband
+    window_size: ''
+  states:
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: tp
+  id: variable_drm_config
+  parameters:
+    RM: '1'
+    SO: '3'
+    audio_sample_rate: '24000'
+    long_interl: 'False'
+    msc_mapping: '1'
+    msc_prot_level_2_16: '1'
+    msc_prot_level_2_64: '0'
+    sdc_mapping: '1'
+    station_label: '"gr-drm Live"'
+    text_message: '"GNU Radio DRM sound-card baseband"'
+  states:
+    coordinate: [32, 16]
+    rotation: 0
+    state: enabled
+- name: programme_tone
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '0.05'
+    comment: 'Deterministic audio programme source; replace with Audio Source for a microphone or loopback device.'
+    freq: '1000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: '24000'
+    showports: 'False'
+    type: float
+    waveform: analog.GR_COS_WAVE
+  states:
+    coordinate: [32, 248]
+    rotation: 0
+    state: enabled
+- name: pcm_scale
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Scale normalized audio for the FAAC float PCM interface used by gr-drm.'
+    const: '32768.0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    coordinate: [256, 248]
+    rotation: 0
+    state: enabled
+- name: audio_encoder
+  id: drm_audio_encoder_sb
+  parameters:
+    len_out: tp.msc().L_MUX()
+    tp: tp
+  states:
+    coordinate: [480, 248]
+    rotation: 0
+    state: enabled
+- name: msc_scrambler
+  id: drm_scrambler_bb
+  parameters:
+    block_len: tp.msc().L_MUX()
+  states:
+    coordinate: [680, 248]
+    rotation: 0
+    state: enabled
+- name: msc_mlc
+  id: mlc_bc
+  parameters:
+    channel_type: '"MSC"'
+    tp: tp
+  states:
+    coordinate: [872, 248]
+    rotation: 0
+    state: enabled
+- name: msc_interleaver
+  id: drm_interleaver_cc
+  parameters:
+    depth: 'drm.INTL_DEPTH_DRM'
+    interl_seq: tp.msc().cell_interl_seq()
+    long_interl: tp.cfg().long_interl()
+  states:
+    coordinate: [1064, 248]
+    rotation: 0
+    state: enabled
+- name: fac_generator
+  id: drm_generate_fac_b
+  parameters:
+    tp: tp
+  states:
+    coordinate: [480, 400]
+    rotation: 0
+    state: enabled
+- name: fac_scrambler
+  id: drm_scrambler_bb
+  parameters:
+    block_len: tp.fac().L()
+  states:
+    coordinate: [680, 400]
+    rotation: 0
+    state: enabled
+- name: fac_mlc
+  id: mlc_bc
+  parameters:
+    channel_type: '"FAC"'
+    tp: tp
+  states:
+    coordinate: [872, 400]
+    rotation: 0
+    state: enabled
+- name: sdc_generator
+  id: drm_generate_sdc_b
+  parameters:
+    tp: tp
+  states:
+    coordinate: [480, 536]
+    rotation: 0
+    state: enabled
+- name: sdc_scrambler
+  id: drm_scrambler_bb
+  parameters:
+    block_len: tp.sdc().L()
+  states:
+    coordinate: [680, 536]
+    rotation: 0
+    state: enabled
+- name: sdc_mlc
+  id: mlc_bc
+  parameters:
+    channel_type: '"SDC"'
+    tp: tp
+  states:
+    coordinate: [872, 536]
+    rotation: 0
+    state: enabled
+- name: cell_mapper
+  id: cell_mapping_cc
+  parameters:
+    tp: tp
+  states:
+    coordinate: [1280, 344]
+    rotation: 0
+    state: enabled
+- name: ifft
+  id: fft_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Convert mapped DRM carriers to time-domain OFDM symbols.'
+    fft_size: tp.ofdm().nfft()
+    forward: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nthreads: '1'
+    shift: 'True'
+    type: complex
+    window: '[]'
+  states:
+    coordinate: [1504, 344]
+    rotation: 0
+    state: enabled
+- name: cyclic_prefix
+  id: digital_ofdm_cyclic_prefixer
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    cp_len: tp.ofdm().nfft() * tp.ofdm().cp_ratio_enum() // tp.ofdm().cp_ratio_denom()
+    input_size: tp.ofdm().nfft()
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    rolloff: '0'
+    tagname: '""'
+  states:
+    coordinate: [1696, 344]
+    rotation: 0
+    state: enabled
+- name: baseband_gain
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Conservative level to protect sound-card outputs from clipping.'
+    const: '0.01'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    coordinate: [1912, 344]
+    rotation: 0
+    state: enabled
+- name: baseband_carrier
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '1.0'
+    comment: 'Shift complex DRM baseband to a 7 kHz real sound-card waveform.'
+    freq: '7000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: '48000'
+    showports: 'False'
+    type: complex
+    waveform: analog.GR_COS_WAVE
+  states:
+    coordinate: [1912, 496]
+    rotation: 0
+    state: enabled
+- name: baseband_mixer
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    coordinate: [2144, 384]
+    rotation: 0
+    state: enabled
+- name: real_output
+  id: blocks_complex_to_real
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    coordinate: [2344, 384]
+    rotation: 0
+    state: enabled
+- name: soundcard_sink
+  id: audio_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: 'Default 48 kHz output. Select a virtual cable or line output in macOS before running.'
+    device_name: '""'
+    num_inputs: '1'
+    ok_to_block: 'True'
+    samp_rate: '48000'
+  states:
+    coordinate: [2536, 384]
+    rotation: 0
+    state: enabled
+
+connections:
+- [programme_tone, '0', pcm_scale, '0']
+- [pcm_scale, '0', audio_encoder, '0']
+- [audio_encoder, '0', msc_scrambler, '0']
+- [msc_scrambler, '0', msc_mlc, '0']
+- [msc_mlc, '0', msc_interleaver, '0']
+- [msc_interleaver, '0', cell_mapper, '0']
+- [sdc_generator, '0', sdc_scrambler, '0']
+- [sdc_scrambler, '0', sdc_mlc, '0']
+- [sdc_mlc, '0', cell_mapper, '1']
+- [fac_generator, '0', fac_scrambler, '0']
+- [fac_scrambler, '0', fac_mlc, '0']
+- [fac_mlc, '0', cell_mapper, '2']
+- [cell_mapper, '0', ifft, '0']
+- [ifft, '0', cyclic_prefix, '0']
+- [cyclic_prefix, '0', baseband_gain, '0']
+- [baseband_gain, '0', baseband_mixer, '0']
+- [baseband_carrier, '0', baseband_mixer, '1']
+- [baseband_mixer, '0', real_output, '0']
+- [real_output, '0', soundcard_sink, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0
