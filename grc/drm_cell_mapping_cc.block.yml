@@ -1,0 +1,29 @@
+id: cell_mapping_cc
+label: DRM Cell mapping
+category: '[DRM]'
+flags:
+- python
+templates:
+  imports: import drm
+  make: drm.cell_mapping_cc($tp, (tp.msc().N_MUX() * tp.ofdm().M_TF() * 8, tp.sdc().N() * 8, tp.fac().N() * tp.ofdm().M_TF() * 8))
+parameters:
+- id: tp
+  label: Transmit Params
+  dtype: raw
+  hide: part
+inputs:
+- label: MSC
+  domain: stream
+  dtype: complex
+- label: SDC
+  domain: stream
+  dtype: complex
+- label: FAC
+  domain: stream
+  dtype: complex
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+  vlen: tp.ofdm().nfft()
+file_format: 1

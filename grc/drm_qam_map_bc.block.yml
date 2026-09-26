@@ -1,0 +1,34 @@
+id: drm_qam_map_bc
+label: DRM QAM Mapping
+category: '[DRM]'
+flags:
+- python
+templates:
+  imports: import drm
+  make: drm.qam_map_bc($map_table, $bits_per_symbol, $vlen_out, $n_inputs)
+parameters:
+- id: map_table
+  label: Mapping table
+  dtype: raw
+  hide: part
+- id: bits_per_symbol
+  label: Bits per symbol
+  dtype: int
+- id: vlen_out
+  label: Output vector length
+  dtype: int
+  hide: part
+- id: n_inputs
+  label: Input ports
+  dtype: int
+  hide: part
+inputs:
+- label: in
+  domain: stream
+  dtype: byte
+  multiplicity: $n_inputs
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+file_format: 1

@@ -1,0 +1,22 @@
+id: drm_interleaver_bb
+label: Bit Interleaver
+category: '[DRM]'
+flags:
+- python
+templates:
+  imports: import drm
+  make: drm.interleaver_bb($interl_seq)
+parameters:
+- id: interl_seq
+  label: Interleaver Sequence
+  dtype: int_vector
+  hide: part
+inputs:
+- label: in
+  domain: stream
+  dtype: byte
+outputs:
+- label: out
+  domain: stream
+  dtype: byte
+file_format: 1

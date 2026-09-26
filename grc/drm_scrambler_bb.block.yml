@@ -1,0 +1,22 @@
+id: drm_scrambler_bb
+label: Scrambler
+category: '[DRM]'
+flags:
+- python
+templates:
+  imports: import drm
+  make: drm.scrambler_bb($block_len)
+parameters:
+- id: block_len
+  label: Block Length
+  dtype: raw
+  hide: part
+inputs:
+- label: in
+  domain: stream
+  dtype: byte
+outputs:
+- label: out
+  domain: stream
+  dtype: byte
+file_format: 1

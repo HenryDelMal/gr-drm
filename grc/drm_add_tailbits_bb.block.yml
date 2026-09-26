@@ -1,0 +1,26 @@
+id: drm_add_tailbits_bb
+label: Add Tail Bits
+category: '[DRM]'
+flags:
+- python
+templates:
+  imports: import drm
+  make: drm.add_tailbits_bb($vlen_in, $n_tailbits)
+parameters:
+- id: vlen_in
+  label: Input Vector Length
+  dtype: int
+  hide: part
+- id: n_tailbits
+  label: Number of Tail Bits
+  dtype: int
+  hide: part
+inputs:
+- label: in
+  domain: stream
+  dtype: byte
+outputs:
+- label: out
+  domain: stream
+  dtype: byte
+file_format: 1

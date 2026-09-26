@@ -1,0 +1,30 @@
+id: drm_interleaver_cc
+label: Cell Interleaver
+category: '[DRM]'
+flags:
+- python
+templates:
+  imports: import drm
+  make: drm.interleaver_cc($interl_seq, $long_interl, $depth)
+parameters:
+- id: interl_seq
+  label: Interleaving Sequence
+  dtype: int_vector
+  hide: part
+- id: long_interl
+  label: Long Interleaving
+  dtype: bool
+  hide: part
+- id: depth
+  label: Interleaving Depth
+  dtype: int
+  hide: part
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+file_format: 1

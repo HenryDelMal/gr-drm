@@ -1,0 +1,18 @@
+id: drm_generate_fac_b
+label: FAC Generator
+category: '[DRM]'
+flags:
+- python
+templates:
+  imports: import drm
+  make: drm.generate_fac_b($tp)
+parameters:
+- id: tp
+  label: Transmit Parameters
+  dtype: raw
+  hide: part
+outputs:
+- label: out
+  domain: stream
+  dtype: byte
+file_format: 1

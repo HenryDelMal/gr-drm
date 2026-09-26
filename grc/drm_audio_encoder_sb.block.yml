@@ -1,0 +1,26 @@
+id: drm_audio_encoder_sb
+label: Audio Encoder
+category: '[DRM]'
+flags:
+- python
+templates:
+  imports: import drm
+  make: drm.audio_encoder_sb($tp)
+parameters:
+- id: tp
+  label: Transmit Parameters
+  dtype: raw
+  hide: part
+- id: len_out
+  label: Output Vector Length
+  dtype: int
+  hide: part
+inputs:
+- label: in
+  domain: stream
+  dtype: float
+outputs:
+- label: out
+  domain: stream
+  dtype: byte
+file_format: 1
