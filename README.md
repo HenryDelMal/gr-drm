@@ -20,58 +20,27 @@ Contents
 Installation
 ------------
 
-Dependencies: GNU Radio (min. v3.7), UHD, FAAC
+Dependencies: GNU Radio 3.10 or newer, Python 3, pybind11, and FAAC.
 
-From Source (automated)
-=======================
-
-If you're using a recent version of the popular linux distributions, [pybombs](http://pybombs.info) is probably the way to go:
-
-```shell
-git clone --recursive https://github.com/pybombs/pybombs.git
-cd pybombs
-./pybombs install gr-drm
-```
-
-and answering all the questions to best knowledge (the defaults are sane); you might need to later call
-
-```shell
-./pybombs env
-```
-
-to generate a file that you can `source <filename>` in your .bashrc or .zshenv.
+FAAC remains the audio encoder used by the transmitter. Both the legacy
+`faacEnc*` API and the FAAC 2.1 API are supported. The encoder is configured
+for raw MPEG-4 AAC-LC output, preserving the existing DRM audio framing.
 
 From Source (manual)
 ====================
 
-For installation instructions for GNU Radio and UHD please visit 
-[GNU Radio](http://www.gnuradio.org) (there is a build script making things really easy!).
-The instructions assume that you don't want to install into your home folder. If that's the
-case, adjust the prefixes accordingly.
+Install the development packages for the dependencies above, then build with:
 
-- FAAC
+```shell
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+ctest --test-dir build --output-on-failure
+cmake --install build
+```
 
-		wget http://downloads.sourceforge.net/faac/faac-1.28.tar.gz
-		tar zxf faac-1.28.tar.gz
-		cd faac-1.28
-		. bootstrap
-		./configure --with-pic --disable-shared --without-mp4v2 --enable-drm
-		make
-		sudo cp include/faaccfg.h  include/faac.h /usr/include
-		sudo cp libfaac/.libs/libfaac.a /usr/local/lib
-		cd ..
-		
-- gr-drm	
-
-		git clone git://github.com/kit-cel/gr-drm.git
-		cd gr-drm
-		mkdir build
-		cd build
-		cmake ../
-		make
-		make test # optional, all tests should pass!
-		sudo make install # sudo is only needed if you don't install to your home folder
-		sudo ldconfig
+Set `CMAKE_INSTALL_PREFIX` if the module should be installed outside GNU
+Radio's default prefix. On Linux, refresh the dynamic linker cache if required
+by the selected prefix.
 		
 Usage
 -----
