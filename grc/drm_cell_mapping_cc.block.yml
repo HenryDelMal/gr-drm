@@ -25,5 +25,5 @@ outputs:
 - label: out
   domain: stream
   dtype: complex
-  vlen: tp.ofdm().nfft()
+  vlen: ${ tp.ofdm().nfft() }
 file_format: 1
