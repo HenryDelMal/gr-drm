@@ -5,7 +5,7 @@ flags:
 - python
 templates:
   imports: import drm
-  make: drm.qam_map_bc($map_table, $bits_per_symbol, $vlen_out, $n_inputs)
+  make: drm.qam_map_bc(${map_table}, ${bits_per_symbol}, ${vlen_out}, ${n_inputs})
 parameters:
 - id: map_table
   label: Mapping table
@@ -26,7 +26,7 @@ inputs:
 - label: in
   domain: stream
   dtype: byte
-  multiplicity: $n_inputs
+  multiplicity: ${n_inputs}
 outputs:
 - label: out
   domain: stream

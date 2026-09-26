@@ -5,7 +5,7 @@ flags:
 - python
 templates:
   imports: import drm
-  make: drm.make_mlc($channel_type, $tp)
+  make: drm.make_mlc(${channel_type}, ${tp})
 parameters:
 - id: channel_type
   label: Channel Type

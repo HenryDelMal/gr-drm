@@ -1,11 +1,11 @@
 id: variable_drm_config
 label: DRM Configuration
 category: '[DRM]'
-flags:
-- python
+flags: [show_id, python]
+value: ${ drm.transm_params(int(RM), int(SO), False, 0, int(msc_mapping), 0, int(msc_prot_level_2_16) if int(msc_mapping) == 1 else int(msc_prot_level_2_64), int(sdc_mapping), 0, str(long_interl) == 'True', int(audio_sample_rate), station_label, text_message) }
 templates:
   imports: import drm
-  make: drm.transm_params($RM, $SO, False, 0, $msc_mapping, 0, $msc_prot_level_2_16 if $msc_mapping()==1 else $msc_prot_level_2_64, $sdc_mapping, 0, $long_interl, $audio_sample_rate, $station_label, $text_message)
+  var_make: self.${id} = ${id} = drm.transm_params(${RM}, ${SO}, False, 0, ${msc_mapping}, 0, ${msc_prot_level_2_16 if int(msc_mapping) == 1 else msc_prot_level_2_64}, ${sdc_mapping}, 0, ${long_interl}, ${audio_sample_rate}, ${station_label}, ${text_message})
 parameters:
 - id: RM
   label: Robustness mode
@@ -73,7 +73,7 @@ parameters:
   label: MSC Protection Level
   dtype: enum
   default: '0'
-  hide: '#if $msc_mapping()==''1'' then ''none'' else ''all''#'
+  hide: ${ 'none' if int(msc_mapping) == 1 else 'all' }
   options:
   - '0'
   - '1'
@@ -84,7 +84,7 @@ parameters:
   label: MSC Protection Level
   dtype: enum
   default: '0'
-  hide: '#if $msc_mapping()==''2'' then ''none'' else ''all''#'
+  hide: ${ 'none' if int(msc_mapping) == 2 else 'all' }
   options:
   - '0'
   - '1'

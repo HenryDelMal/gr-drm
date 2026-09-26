@@ -5,7 +5,7 @@ flags:
 - python
 templates:
   imports: import drm
-  make: drm.m3ufile_source_f($filename, $tp)
+  make: drm.m3ufile_source_f(${filename}, ${tp})
 parameters:
 - id: filename
   label: file name
