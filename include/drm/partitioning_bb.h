@@ -37,7 +37,7 @@ namespace gr {
     class DRM_API partitioning_bb : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<partitioning_bb> sptr;
+      using sptr = std::shared_ptr<partitioning_bb>;
 
       /*!
        * \brief Return a shared_ptr to a new instance of drm::partitioning_bb.

@@ -31,8 +31,7 @@ namespace gr {
     m3ufile_source_f::sptr
     m3ufile_source_f::make(std::string filename, transm_params *tp)
     {
-      return gnuradio::get_initial_sptr
-        (new m3ufile_source_f_impl(filename, tp));
+      return gnuradio::make_block_sptr<m3ufile_source_f_impl>(filename, tp);
     }
 
     /*

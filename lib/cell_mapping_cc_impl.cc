@@ -31,8 +31,7 @@ namespace gr {
     cell_mapping_cc::sptr
     cell_mapping_cc::make(transm_params* tp, std::vector< int > input_sizes)
     {
-      return gnuradio::get_initial_sptr
-        (new cell_mapping_cc_impl(tp, input_sizes));
+      return gnuradio::make_block_sptr<cell_mapping_cc_impl>(tp, input_sizes);
     }
 
     /*

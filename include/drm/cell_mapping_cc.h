@@ -39,7 +39,7 @@ namespace gr {
     class DRM_API cell_mapping_cc : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<cell_mapping_cc> sptr;
+      using sptr = std::shared_ptr<cell_mapping_cc>;
 
       /*!
        * \brief Return a shared_ptr to a new instance of drm::cell_mapping_cc.

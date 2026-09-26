@@ -32,8 +32,7 @@ namespace gr {
     audio_encoder_sb::sptr
     audio_encoder_sb::make(transm_params* tp)
     {
-      return gnuradio::get_initial_sptr
-        (new audio_encoder_sb_impl(tp));
+      return gnuradio::make_block_sptr<audio_encoder_sb_impl>(tp);
     }
 
     /*
@@ -76,15 +75,7 @@ namespace gr {
 		d_n_channels = 1; // mono
 		d_L_MUX_MSC = (tp->msc()).L_MUX();
 
-		// open encoder
-		d_encHandle = faacEncOpen(d_tp->cfg().audio_samp_rate(), d_n_channels, &d_transform_length, &d_n_max_bytes_out);
-
-		if(d_encHandle == NULL)
-		{
-			std::cout << "FAAC encoder instance could not be opened. Exit.\n";
-		}
-
-		// configure encoder
+		// Derive the target bitrate before opening/configuring the encoder.
 		int sizeof_byte = 8;
 		int n_bits_usage = (d_L_MUX_MSC / sizeof_byte) * sizeof_byte;
 		int n_bytes_usage = n_bits_usage / sizeof_byte;
@@ -99,7 +90,34 @@ namespace gr {
 		const int n_bytes_act_enc = (int) (d_n_bytes_audio_payload / d_n_aac_frames);
 		int bit_rate = (int) (( n_bytes_act_enc * sizeof_byte) / d_time_aac_superframe * 1000);
 
-			/* set encoder configuration */
+		/* Set encoder configuration. FAAC 2.1 replaced the legacy faacEnc*
+		 * interface with a parameter-at-open API. Keep both paths so older
+		 * distributions continue to build and produce the same raw AAC-LC. */
+#if defined(FAAC_VERSION_MAJOR) && FAAC_VERSION_MAJOR >= 1
+		faac_params enc_params;
+		faac_params_init(&enc_params);
+		enc_params.sample_rate = d_tp->cfg().audio_samp_rate();
+		enc_params.num_channels = d_n_channels;
+		enc_params.input_format = FAAC_INPUT_FLOAT;
+		enc_params.use_tns = true;
+		enc_params.object_type = FAAC_OBJ_LOW;
+		enc_params.mpeg_version = FAAC_MPEG4;
+		enc_params.output_format = FAAC_STREAM_RAW;
+		enc_params.bit_rate = bit_rate;
+		enc_params.bandwidth = 0;
+		if (faac_encoder_open(&enc_params, &d_encHandle) != FAAC_OK)
+			throw std::runtime_error("FAAC encoder instance could not be opened");
+		faac_encoder_info enc_info = {};
+		enc_info.struct_size = sizeof(enc_info);
+		if (faac_encoder_get_info(d_encHandle, &enc_info) != FAAC_OK)
+			throw std::runtime_error("FAAC encoder properties could not be read");
+		d_transform_length = enc_info.frame_samples * d_n_channels;
+		d_n_max_bytes_out = enc_info.max_output_bytes;
+#else
+		d_encHandle = faacEncOpen(d_tp->cfg().audio_samp_rate(), d_n_channels,
+		                             &d_transform_length, &d_n_max_bytes_out);
+		if(d_encHandle == NULL)
+			throw std::runtime_error("FAAC encoder instance could not be opened");
 		faacEncConfigurationPtr cur_enc_format;
 		cur_enc_format = faacEncGetCurrentConfiguration(d_encHandle);
 		cur_enc_format->inputFormat = FAAC_INPUT_FLOAT;
@@ -110,6 +128,7 @@ namespace gr {
 		cur_enc_format->bitRate = bit_rate;
 		cur_enc_format->bandWidth = 0;	/* Let the encoder choose the bandwidth */
 		faacEncSetConfiguration(d_encHandle, cur_enc_format);
+#endif
 
 		// set text message if available
 		if(d_tp->cfg().text())
@@ -127,6 +146,11 @@ namespace gr {
      */
     audio_encoder_sb_impl::~audio_encoder_sb_impl()
     {
+#if defined(FAAC_VERSION_MAJOR) && FAAC_VERSION_MAJOR >= 1
+		faac_encoder_close(&d_encHandle);
+#else
+		faacEncClose(d_encHandle);
+#endif
     }
 
     void
@@ -206,7 +230,20 @@ namespace gr {
 			memcpy(tmp_pcm_buffer, d_in + j*d_transform_length, d_transform_length * sizeof(float));
 
 			/* actual encoding */
-			int n_bytes_encoded = faacEncEncode(d_encHandle, (int32_t*) tmp_pcm_buffer, d_transform_length, tmp_aac_buffer, d_n_max_bytes_out);
+			int n_bytes_encoded;
+#if defined(FAAC_VERSION_MAJOR) && FAAC_VERSION_MAJOR >= 1
+			uint32_t bytes_written = 0;
+			const faac_status status = faac_encoder_encode(
+			    d_encHandle, tmp_pcm_buffer, d_transform_length,
+			    tmp_aac_buffer, d_n_max_bytes_out, &bytes_written);
+			if (status != FAAC_OK)
+				throw std::runtime_error(faac_strerror(status));
+			n_bytes_encoded = static_cast<int>(bytes_written);
+#else
+			n_bytes_encoded = faacEncEncode(d_encHandle, (int32_t*) tmp_pcm_buffer,
+			                                   d_transform_length, tmp_aac_buffer,
+			                                   d_n_max_bytes_out);
+#endif
 		    d_n_bytes_encoded.push_back(n_bytes_encoded);
 		    //std::cout << "encoder: n_bytes_encoded: " << n_bytes_encoded << std::endl;
 		    memcpy(aac_buffer, tmp_aac_buffer, n_bytes_encoded * sizeof(char));
@@ -480,4 +517,3 @@ namespace gr {
 
   } /* namespace drm */
 } /* namespace gr */
-

@@ -31,8 +31,7 @@ namespace gr {
 		generate_fac_b::sptr
 		generate_fac_b::make(transm_params* tp)
 		{
-			return gnuradio::get_initial_sptr
-					(new generate_fac_b_impl(tp));
+			return gnuradio::make_block_sptr<generate_fac_b_impl>(tp);
 		}
 
 		/*

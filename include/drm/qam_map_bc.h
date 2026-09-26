@@ -37,7 +37,7 @@ namespace gr {
     class DRM_API qam_map_bc : virtual public gr::sync_decimator
     {
     public:
-    	typedef boost::shared_ptr<qam_map_bc> sptr;
+        using sptr = std::shared_ptr<qam_map_bc>;
 
       /*!
        * \brief Return a shared_ptr to a new instance of drm::qam_map_bc.
@@ -54,4 +54,3 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_DRM_QAM_MAP_bc_H */
-

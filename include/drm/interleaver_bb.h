@@ -36,7 +36,7 @@ namespace gr {
     class DRM_API interleaver_bb : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<interleaver_bb> sptr;
+      using sptr = std::shared_ptr<interleaver_bb>;
 
       /*!
        * \brief Return a shared_ptr to a new instance of drm::interleaver_bb.

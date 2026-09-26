@@ -31,8 +31,7 @@ namespace gr {
     qam_map_bc::sptr
     qam_map_bc::make(const float map_table[][2], int bits_per_symbol, int vlen_out, int n_inputs)
     {
-      return gnuradio::get_initial_sptr
-        (new qam_map_bc_impl(map_table, bits_per_symbol, vlen_out, n_inputs));
+      return gnuradio::make_block_sptr<qam_map_bc_impl>(map_table, bits_per_symbol, vlen_out, n_inputs);
     }
 
     /*

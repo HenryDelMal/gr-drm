@@ -31,8 +31,7 @@ namespace gr {
     generate_sdc_b::sptr
     generate_sdc_b::make(transm_params* tp)
     {
-      return gnuradio::get_initial_sptr
-        (new generate_sdc_b_impl(tp));
+      return gnuradio::make_block_sptr<generate_sdc_b_impl>(tp);
     }
 
     /*

@@ -31,8 +31,7 @@ namespace gr {
     scrambler_bb::sptr
     scrambler_bb::make(unsigned int block_len)
     {
-      return gnuradio::get_initial_sptr
-        (new scrambler_bb_impl(block_len));
+      return gnuradio::make_block_sptr<scrambler_bb_impl>(block_len);
     }
 
     /*

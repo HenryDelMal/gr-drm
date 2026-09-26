@@ -38,7 +38,7 @@ namespace gr {
     class DRM_API m3ufile_source_f : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<m3ufile_source_f> sptr;
+      using sptr = std::shared_ptr<m3ufile_source_f>;
 
       /*!
        * \brief Return a shared_ptr to a new instance of drm::m3ufile_source_f.

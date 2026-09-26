@@ -31,8 +31,7 @@ namespace gr {
     interleaver_cc::sptr
     interleaver_cc::make(std::vector<int> interl_seq, bool long_interl, int depth)
     {
-      return gnuradio::get_initial_sptr
-        (new interleaver_cc_impl(interl_seq, long_interl, depth));
+      return gnuradio::make_block_sptr<interleaver_cc_impl>(interl_seq, long_interl, depth);
     }
 
     /*

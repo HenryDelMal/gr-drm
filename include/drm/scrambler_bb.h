@@ -37,7 +37,7 @@ namespace gr {
     class DRM_API scrambler_bb : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<scrambler_bb> sptr;
+      using sptr = std::shared_ptr<scrambler_bb>;
 
       /*!
        * \brief Return a shared_ptr to a new instance of drm::scrambler_bb.

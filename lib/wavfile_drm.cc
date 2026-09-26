@@ -27,7 +27,6 @@
 #include <gnuradio/blocks/wavfile.h>
 #include <cstring>
 #include <stdint.h>
-#include <boost/detail/endian.hpp> //BOOST_BIG_ENDIAN
 
 namespace gr {
   namespace drm {
@@ -36,7 +35,7 @@ namespace gr {
 
     // Basically, this is the opposite of htonx() and ntohx()
     // Define host to/from worknet (little endian) short and long
-#ifdef BOOST_BIG_ENDIAN
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 
     static inline uint16_t __gri_wav_bs16(uint16_t x)
     {
@@ -60,7 +59,7 @@ namespace gr {
     #define htows(x) uint16_t(x)
     #define wtohs(x) uint16_t(x)
 
-#endif // BOOST_BIG_ENDIAN
+#endif
 
     // WAV files are always little-endian, so we need some byte switching macros
     static inline uint32_t host_to_wav(uint32_t x) { return htowl(x); }

@@ -41,7 +41,7 @@ namespace gr {
     class DRM_API audio_encoder_sb : virtual public gr::block
     {
      public:
-  		typedef boost::shared_ptr<audio_encoder_sb> sptr;
+        using sptr = std::shared_ptr<audio_encoder_sb>;
 
 		static sptr make(transm_params* tp);
 		/*!
@@ -58,4 +58,3 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_DRM_AUDIO_ENCODER_Sb_H */
-

@@ -31,8 +31,7 @@ namespace gr {
 		partitioning_bb::sptr
 		partitioning_bb::make(unsigned int vlen_in, std::vector<int> vlen_out)
 		{
-			return gnuradio::get_initial_sptr
-					(new partitioning_bb_impl(vlen_in, vlen_out));
+			return gnuradio::make_block_sptr<partitioning_bb_impl>(vlen_in, vlen_out);
 		}
 
 		/*

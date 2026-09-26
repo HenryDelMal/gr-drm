@@ -32,8 +32,7 @@ namespace gr {
     add_tailbits_bb::sptr
     add_tailbits_bb::make(int vlen_in, int n_tailbits)
     {
-      return gnuradio::get_initial_sptr
-        (new add_tailbits_bb_impl(vlen_in, n_tailbits));
+      return gnuradio::make_block_sptr<add_tailbits_bb_impl>(vlen_in, n_tailbits);
     }
 
     /*

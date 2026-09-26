@@ -37,7 +37,7 @@ namespace gr {
     class DRM_API generate_fac_b : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<generate_fac_b> sptr;
+      using sptr = std::shared_ptr<generate_fac_b>;
 
       /*!
        * \brief Return a shared_ptr to a new instance of drm::generate_fac_b.

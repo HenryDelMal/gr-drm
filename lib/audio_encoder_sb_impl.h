@@ -51,7 +51,11 @@ namespace gr {
 		int d_text_msg_index; // indicates the distance from the beginning of the buffer where the text message shall be positioned
 
 		std::vector<int> d_n_bytes_encoded; // return value of faacEncEncode(). Used to determine frame lengths.
+#if defined(FAAC_VERSION_MAJOR) && FAAC_VERSION_MAJOR >= 1
+		faac_encoder* d_encHandle;
+#else
 		faacEncHandle d_encHandle;
+#endif
 		transm_params* d_tp; // transmission params (holding config/msc/... values)
       // Nothing to declare in this block.
 
@@ -76,4 +80,3 @@ namespace gr {
 } // namespace gr
 
 #endif /* INCLUDED_DRM_AUDIO_ENCODER_Sb_IMPL_H */
-

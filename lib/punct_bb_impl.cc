@@ -31,8 +31,7 @@ namespace gr {
     punct_bb::sptr
     punct_bb::make(std::vector<unsigned char> punct_pat_1, std::vector<unsigned char> punct_pat_2, int vlen_in, int vlen_out, int num_tailbits)
     {
-      return gnuradio::get_initial_sptr
-        (new punct_bb_impl(punct_pat_1, punct_pat_2, vlen_in, vlen_out, num_tailbits));
+      return gnuradio::make_block_sptr<punct_bb_impl>(punct_pat_1, punct_pat_2, vlen_in, vlen_out, num_tailbits);
     }
 
     /*

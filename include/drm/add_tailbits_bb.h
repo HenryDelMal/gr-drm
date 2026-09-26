@@ -36,7 +36,7 @@ namespace gr {
     class DRM_API add_tailbits_bb : virtual public block
     {
      public:
-      typedef boost::shared_ptr<add_tailbits_bb> sptr;
+      using sptr = std::shared_ptr<add_tailbits_bb>;
 
       /*!
        * \brief Return a shared_ptr to a new instance of drm::add_tailbits_bb.
