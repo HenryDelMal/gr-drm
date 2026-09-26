@@ -157,7 +157,7 @@ class DRMTransOptionsDialog(QtGui.QDialog,transmission_options.Ui_Dialog):
                 elif not line.find('serial')==-1:
                     usrp.identification.append('serial='+line[line.find('serial')+8:])
                     usrp.networked.append(False)
-            print "USRP name:", usrp.name, "identification:", usrp.identification, "networked series:", usrp.networked
+            print("USRP name:", usrp.name, "identification:", usrp.identification, "networked series:", usrp.networked)
             for x in range(0, len(usrp.name)):
                 self.usrp_select.addItem(usrp.identification[x]+' ('+usrp.name[x]+')')
             self.usrp_select.addItem('No USRP')

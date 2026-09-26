@@ -57,7 +57,7 @@ class drm_transmitter(gr.top_block):
                 ",".join((self.usrp_addr, "")),
                 uhd.stream_args(
                     cpu_format="fc32",
-                    channels=range(1),
+                    channels=list(range(1)),
                 ),
             )
             self.uhd_usrp_sink_0.set_samp_rate(samp_rate * 250 / 48)

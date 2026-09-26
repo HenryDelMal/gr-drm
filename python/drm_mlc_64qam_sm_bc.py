@@ -50,9 +50,9 @@ class drm_mlc_64qam_sm_bc(gr.hier_block2):
         ##################################################
         # Blocks
         ##################################################
-        self.trellis_encoder_xx_top_0 =  trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0, 0) if False else trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0) 
-        self.trellis_encoder_xx_top =  trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0, 0) if False else trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0) 
-        self.trellis_encoder_xx_bot =  trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0, 0) if False else trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0) 
+        self.trellis_encoder_xx_top_0 =  trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0, 0) if False else trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0)
+        self.trellis_encoder_xx_top =  trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0, 0) if False else trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0)
+        self.trellis_encoder_xx_bot =  trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0, 0) if False else trellis.encoder_bb(trellis.fsm(1, denom_mother_code_rate, gen_poly), 0)
         self.drm_qam_map_bc_0 = drm.qam_map_bc(map_tab, bits_per_symbol, vlen_out, 3)
         self.drm_punct_bb_top = drm.punct_bb(pp_0, pp_0_tail, (part_len_top + n_tailbits) * denom_mother_code_rate, vlen_out * 2, n_tailbits * denom_mother_code_rate)
         self.drm_punct_bb_mid = drm.punct_bb(pp_1, pp_1_tail, (part_len_mid+ n_tailbits) * denom_mother_code_rate, vlen_out * 2, n_tailbits * denom_mother_code_rate)
@@ -70,25 +70,25 @@ class drm_mlc_64qam_sm_bc(gr.hier_block2):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_unpack_k_bits_bb_bot, 0), (self.drm_punct_bb_bot, 0))    
-        self.connect((self.blocks_unpack_k_bits_bb_mid, 0), (self.drm_punct_bb_mid, 0))    
-        self.connect((self.blocks_unpack_k_bits_bb_top, 0), (self.drm_punct_bb_top, 0))    
-        self.connect((self.drm_add_tailbits_bb_bot, 0), (self.trellis_encoder_xx_bot, 0))    
-        self.connect((self.drm_add_tailbits_bb_top, 0), (self.trellis_encoder_xx_top, 0))    
-        self.connect((self.drm_add_tailbits_bb_top_0, 0), (self.trellis_encoder_xx_top_0, 0))    
-        self.connect((self.drm_interleaver_bb_bot, 0), (self.drm_qam_map_bc_0, 2))    
-        self.connect((self.drm_interleaver_bb_mid, 0), (self.drm_qam_map_bc_0, 1))    
-        self.connect((self.drm_partitioning_64sm_bb_0, 2), (self.drm_add_tailbits_bb_bot, 0))    
-        self.connect((self.drm_partitioning_64sm_bb_0, 0), (self.drm_add_tailbits_bb_top, 0))    
-        self.connect((self.drm_partitioning_64sm_bb_0, 1), (self.drm_add_tailbits_bb_top_0, 0))    
-        self.connect((self.drm_punct_bb_bot, 0), (self.drm_interleaver_bb_bot, 0))    
-        self.connect((self.drm_punct_bb_mid, 0), (self.drm_interleaver_bb_mid, 0))    
-        self.connect((self.drm_punct_bb_top, 0), (self.drm_qam_map_bc_0, 0))    
-        self.connect((self.drm_qam_map_bc_0, 0), (self, 0))    
-        self.connect((self, 0), (self.drm_partitioning_64sm_bb_0, 0))    
-        self.connect((self.trellis_encoder_xx_bot, 0), (self.blocks_unpack_k_bits_bb_bot, 0))    
-        self.connect((self.trellis_encoder_xx_top, 0), (self.blocks_unpack_k_bits_bb_top, 0))    
-        self.connect((self.trellis_encoder_xx_top_0, 0), (self.blocks_unpack_k_bits_bb_mid, 0))    
+        self.connect((self.blocks_unpack_k_bits_bb_bot, 0), (self.drm_punct_bb_bot, 0))
+        self.connect((self.blocks_unpack_k_bits_bb_mid, 0), (self.drm_punct_bb_mid, 0))
+        self.connect((self.blocks_unpack_k_bits_bb_top, 0), (self.drm_punct_bb_top, 0))
+        self.connect((self.drm_add_tailbits_bb_bot, 0), (self.trellis_encoder_xx_bot, 0))
+        self.connect((self.drm_add_tailbits_bb_top, 0), (self.trellis_encoder_xx_top, 0))
+        self.connect((self.drm_add_tailbits_bb_top_0, 0), (self.trellis_encoder_xx_top_0, 0))
+        self.connect((self.drm_interleaver_bb_bot, 0), (self.drm_qam_map_bc_0, 2))
+        self.connect((self.drm_interleaver_bb_mid, 0), (self.drm_qam_map_bc_0, 1))
+        self.connect((self.drm_partitioning_64sm_bb_0, 2), (self.drm_add_tailbits_bb_bot, 0))
+        self.connect((self.drm_partitioning_64sm_bb_0, 0), (self.drm_add_tailbits_bb_top, 0))
+        self.connect((self.drm_partitioning_64sm_bb_0, 1), (self.drm_add_tailbits_bb_top_0, 0))
+        self.connect((self.drm_punct_bb_bot, 0), (self.drm_interleaver_bb_bot, 0))
+        self.connect((self.drm_punct_bb_mid, 0), (self.drm_interleaver_bb_mid, 0))
+        self.connect((self.drm_punct_bb_top, 0), (self.drm_qam_map_bc_0, 0))
+        self.connect((self.drm_qam_map_bc_0, 0), (self, 0))
+        self.connect((self, 0), (self.drm_partitioning_64sm_bb_0, 0))
+        self.connect((self.trellis_encoder_xx_bot, 0), (self.blocks_unpack_k_bits_bb_bot, 0))
+        self.connect((self.trellis_encoder_xx_top, 0), (self.blocks_unpack_k_bits_bb_top, 0))
+        self.connect((self.trellis_encoder_xx_top_0, 0), (self.blocks_unpack_k_bits_bb_mid, 0))
 
     def get_vlen_in(self):
         return self.vlen_in
