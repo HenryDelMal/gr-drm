@@ -11,3 +11,7 @@ waveform through the default sound-card sink. Route it to a virtual audio cable
 or line output and keep speaker volume low. Replace the Signal Source with an
 Audio Source block to use a microphone or loopback input. Its Qt window previews
 the mapped carrier constellation before the IFFT.
+
+The example includes a small local Matplotlib compatibility shim because some
+Python 3.14/macOS Matplotlib builds fail while GNU Radio probes optional font
+metadata; the Qt constellation sink itself does not require Matplotlib.
