@@ -10,5 +10,4 @@ through the full DRM transmitter and emits a real 48 kHz, 7 kHz-IF baseband
 waveform through the default sound-card sink. Route it to a virtual audio cable
 or line output and keep speaker volume low. Replace the Signal Source with an
 Audio Source block to use a microphone or loopback input. Its Qt window previews
-the mapped carrier constellation before the IFFT and the final sound-card
-waveform spectrum.
+the mapped carrier constellation before the IFFT.

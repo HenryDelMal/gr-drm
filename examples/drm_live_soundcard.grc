@@ -335,49 +335,6 @@ blocks:
     coordinate: [2536, 384]
     rotation: 0
     state: enabled
-- name: spectrum_preview
-  id: qtgui_freq_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    autoscale: 'False'
-    average: '0.2'
-    axislabels: 'True'
-    bw: '48000'
-    color1: '"blue"'
-    comment: 'Spectrum of the real 48 kHz waveform sent to the sound card.'
-    ctrlpanel: 'False'
-    fc: '0'
-    fftsize: '4096'
-    freqhalf: 'True'
-    grid: 'True'
-    gui_hint: 0,1,1,1
-    label: Relative Gain
-    label1: '"Sound-card DRM waveform"'
-    legend: 'True'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    name: '"DRM Sound-card Spectrum"'
-    nconnections: '1'
-    norm_window: 'False'
-    showports: 'False'
-    tr_chan: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_tag: '""'
-    type: float
-    units: dB
-    update_time: '0.10'
-    width1: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
-    ymax: '0'
-    ymin: '-120'
-  states:
-    coordinate: [2536, 536]
-    rotation: 0
-    state: enabled
-
 connections:
 - [programme_tone, '0', pcm_scale, '0']
 - [pcm_scale, '0', audio_encoder, '0']
@@ -400,7 +357,6 @@ connections:
 - [baseband_carrier, '0', baseband_mixer, '1']
 - [baseband_mixer, '0', real_output, '0']
 - [real_output, '0', soundcard_sink, '0']
-- [real_output, '0', spectrum_preview, '0']
 
 metadata:
   file_format: 1
